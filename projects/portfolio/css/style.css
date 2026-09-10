@@ -1,0 +1,362 @@
+/* ===== 全局重置 ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body { 
+    font-family: 'Segoe UI', Arial, sans-serif; 
+    background: #f5f0f5; 
+    min-height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+}
+
+/* ===== 导航栏 ===== */
+header { 
+    background: #f5a0c0; 
+    padding: 16px 30px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(245,160,192,0.3);
+}
+
+.logo { 
+    color: white; 
+    font-size: 1.5rem; 
+    font-weight: bold; 
+    letter-spacing: 2px; 
+}
+
+nav { display: flex; gap: 25px; }
+nav a { 
+    color: rgba(255,255,255,0.8); 
+    text-decoration: none; 
+    padding: 8px 18px; 
+    border-radius: 20px; 
+    transition: all 0.3s; 
+    font-weight: 500;
+}
+nav a:hover { 
+    color: white; 
+    background: rgba(255,255,255,0.25); 
+    transform: translateY(-2px);
+}
+nav a.active { 
+    background: rgba(255,255,255,0.3); 
+    color: white; 
+}
+
+/* ===== 页脚 ===== */
+footer { 
+    background: #f5a0c0; 
+    color: rgba(255,255,255,0.8); 
+    text-align: center; 
+    padding: 18px; 
+    margin-top: auto; 
+}
+
+/* ============================================ */
+/* ===== 首页样式 ===== */
+/* ============================================ */
+
+.hero {
+    background-image: url('../images/bg.jpg');
+    background-size: cover;
+    background-position: center 30%;
+    padding: 80px 20px;
+    text-align: center;
+    border-radius: 20px;
+    margin: 30px auto 30px;
+    max-width: 1000px;
+    position: relative;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255,255,255,0.7);
+    border-radius: 20px;
+}
+
+.hero-content { position: relative; z-index: 1; }
+.hero h1 { 
+    font-size: 3.5rem; 
+    color: #d480a0; 
+    margin-bottom: 10px; 
+    text-shadow: 0 2px 8px rgba(255,255,255,0.9);
+    background: none; padding: 0;
+}
+.hero .subtitle { 
+    font-size: 1.3rem; 
+    color: #555; 
+    margin-bottom: 25px; 
+    background: none; padding: 0;
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+    max-width: 1000px;
+    margin: 0 auto 40px;
+    padding: 0 20px;
+}
+
+.feature-item {
+    background: white;
+    flex: 1;
+    min-width: 220px;
+    max-width: 300px;
+    padding: 30px 20px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+    border-top: 4px solid #f5a0c0;
+}
+.feature-item:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+}
+.feature-item .icon { font-size: 2.8rem; margin-bottom: 15px; }
+.feature-item h3 { color: #d480a0; margin-bottom: 10px; font-size: 1.2rem; }
+.feature-item p { color: #666; font-size: 0.95rem; line-height: 1.6; }
+
+/* ============================================ */
+/* ===== 公共页面标题区 ===== */
+/* ============================================ */
+
+.page-hero {
+    text-align: center;
+    padding: 40px 20px 20px;
+}
+.page-hero h2 { 
+    font-size: 2.2rem; 
+    color: #d480a0; 
+    margin-bottom: 8px; 
+}
+.page-hero p { color: #888; font-size: 1.1rem; }
+
+/* ============================================ */
+/* ===== 作品页样式 ===== */
+/* ============================================ */
+
+.works-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.works-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: center;
+}
+
+/* ===== 卡片通用样式 ===== */
+.card {
+    background: white;
+    width: 320px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 35px rgba(0,0,0,0.15);
+}
+
+.card-img {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+}
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 20px;
+    text-align: center;
+}
+.card-body h3 { color: #d480a0; margin-bottom: 5px; font-size: 1.2rem; }
+.card-tag {
+    display: inline-block;
+    background: #fce4ec;
+    color: #d480a0;
+    padding: 2px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+}
+.card-desc { color: #666; font-size: 0.95rem; margin-bottom: 12px; line-height: 1.5; }
+.card-detail {
+    background: #f8f4f8;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: left;
+    border-left: 3px solid #f5a0c0;
+}
+
+.btn-card {
+    background: #f5a0c0;
+    color: white;
+    border: none;
+    padding: 8px 24px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+}
+.btn-card:hover {
+    background: #d480a0;
+    transform: scale(1.05);
+}
+
+/* ===== 三种图片交互效果 ===== */
+
+/* 作品1：缩放放大 */
+.effect-zoom img {
+    transition: transform 0.5s ease;
+}
+.effect-zoom:hover img {
+    transform: scale(1.15);
+}
+
+/* 作品2：旋转+倾斜 */
+.effect-rotate img {
+    transition: transform 0.6s ease;
+}
+.effect-rotate:hover img {
+    transform: rotate(12deg) scale(1.05);
+}
+
+/* 作品3：3D翻转 */
+.effect-flip {
+    perspective: 1000px;
+}
+.effect-flip img {
+    transition: transform 0.6s ease;
+}
+.effect-flip:hover img {
+    transform: rotateY(20deg) scale(1.05);
+    box-shadow: 5px 5px 20px rgba(0,0,0,0.2);
+}
+
+/* ===== 作品2悬停变色（文字区域） ===== */
+.hover-highlight {
+    background: #f8f4f8;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: left;
+    border-left: 3px solid #f5a0c0;
+    transition: all 0.4s ease;
+}
+.hover-highlight:hover {
+    background: #fce4ec;
+    border-left-color: #d480a0;
+    transform: translateX(5px);
+    box-shadow: 0 2px 10px rgba(245,160,192,0.2);
+}
+
+/* ============================================ */
+/* ===== 关于我页样式 ===== */
+/* ============================================ */
+
+.about-container {
+    max-width: 800px;
+    margin: 20px auto 40px;
+    padding: 0 20px;
+}
+
+.about-card {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: flex-start;
+}
+
+.about-avatar {
+    flex: 0 0 140px;
+    text-align: center;
+}
+.about-avatar img {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #f5a0c0;
+    box-shadow: 0 4px 15px rgba(245,160,192,0.3);
+}
+
+.about-info {
+    flex: 1;
+    min-width: 250px;
+}
+.about-info h3 { color: #d480a0; font-size: 1.6rem; margin-bottom: 10px; }
+.about-bio { color: #555; font-size: 1rem; line-height: 1.6; margin-bottom: 20px; }
+
+.about-skills h4 { color: #888; margin: 15px 0 8px; font-size: 1rem; }
+.about-skills ul {
+    list-style: none;
+    padding: 0;
+}
+.about-skills ul li {
+    padding: 4px 0;
+    color: #555;
+    font-size: 0.95rem;
+}
+.about-skills ul li::before { content: "✦ "; color: #f5a0c0; }
+
+/* ===== 通用按钮 ===== */
+.btn-primary {
+    background: #f5a0c0;
+    color: white;
+    border: none;
+    padding: 12px 32px;
+    border-radius: 30px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(245,160,192,0.3);
+    display: inline-block;
+    margin-top: 10px;
+}
+.btn-primary:hover {
+    background: #d480a0;
+    transform: scale(1.05) translateY(-3px);
+    box-shadow: 0 6px 20px rgba(245,160,192,0.4);
+}
+
+/* ============================================ */
+/* ===== 响应式 ===== */
+/* ============================================ */
+
+@media (max-width: 768px) {
+    header { flex-direction: column; gap: 12px; padding: 12px 20px; }
+    nav { gap: 15px; flex-wrap: wrap; justify-content: center; }
+    .hero h1 { font-size: 2.5rem; }
+    .hero { padding: 50px 20px; }
+    .card { width: 100%; max-width: 350px; }
+    .about-card { padding: 25px; flex-direction: column; align-items: center; }
+    .about-avatar { flex: none; }
+    .about-info { text-align: center; }
+    .about-skills ul li::before { content: ""; }
+}

@@ -1,0 +1,2 @@
+这是一个使用缓存字节流进行读写操作的测试文件。
+Hello, BufferedOutputStream and BufferedInputStream!

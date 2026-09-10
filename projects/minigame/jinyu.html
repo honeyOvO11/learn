@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<!-- 声明文档类型为 HTML5，让浏览器按标准模式解析 -->
+<html lang="zh">
+<!-- 设置页面语言为中文，方便搜索引擎和屏幕阅读器 -->
+
+<head>
+    <!-- 头部区域，存放网页配置信息，不会在窗口中显示 -->
+    <meta charset="UTF-8">
+    <!-- 字符编码设为 UTF-8，保证所有中文和特殊符号正常显示 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 让网页在手机上自适应宽度，初始缩放为 1 倍 -->
+    <title>🐋 鲸鱼吞珍珠</title>
+    <!-- 浏览器标签页上显示的标题 -->
+
+    <style>
+        /* ===== CSS 样式开始 ===== */
+
+        /* ----- 全局重置：清除浏览器默认边距，让所有元素从零开始 ----- */
+        * {
+            margin: 0;
+            /* 去掉所有元素的外边距（到父容器边缘的距离） */
+            padding: 0;
+            /* 去掉所有元素的内边距（内部留白） */
+            box-sizing: border-box;
+            /* 让元素的宽高包含边框和内边距，方便尺寸控制 */
+            user-select: none;
+            /* 禁止用户选中页面文字，防止玩游戏时拖出蓝条 */
+        }
+
+        /* ----- 页面主体（body）样式 ----- */
+        body {
+            background: #0a2a3a;
+            /* 深蓝色背景，衬托游戏面板 */
+            min-height: 100vh;
+            /* 高度至少占满整个浏览器窗口（100vh = 视口高度） */
+            display: flex;
+            /* 启用弹性布局，使子元素居中 */
+            justify-content: center;
+            /* 水平居中 */
+            align-items: center;
+            /* 垂直居中 */
+            font-family: 'Segoe UI', sans-serif;
+            /* 优先使用 Segoe UI 字体，否则用系统无衬线字体 */
+        }
+
+        /* ----- 游戏主面板（大外框） ----- */
+        .game-wrapper {
+            background: #0d3b4f;
+            /* 面板背景：墨蓝色 */
+            padding: 25px 30px 30px;
+            /* 内边距：上 25px，左右 30px，下 30px，让内容不贴边 */
+            border-radius: 48px;
+            /* 圆角半径 48px，使边框圆润 */
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.6);
+            /* 外阴影：垂直偏移20px，模糊30px，半透明黑色，制造立体感 */
+        }
+
+        /* ----- 画布（游戏画面区域） ----- */
+        canvas {
+            display: block;
+            /* 让画布成为块级元素，方便居中 */
+            border-radius: 24px;
+            /* 画布四角圆润 */
+            background: radial-gradient(circle at 20% 30%, #4a9ec4, #145a7a);
+            /* 画布背景：从左上角亮蓝到深蓝的径向渐变，模拟深海光晕 */
+            width: 600px;
+            /* CSS 显示宽度（必须与 canvas 标签的 width 属性一致） */
+            height: 400px;
+            /* CSS 显示高度（必须与 canvas 标签的 height 属性一致） */
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.4);
+            /* 内阴影，让画布边缘有凹陷的深海感 */
+        }
+
+        /* ----- 底部信息面板（分数 + 提示 + 按钮） ----- */
+        .info-panel {
+            display: flex;
+            /* 弹性布局，让子元素水平排列 */
+            justify-content: space-between;
+            /* 左右两端对齐（分数在左，按钮在右） */
+            align-items: center;
+            /* 垂直居中 */
+            margin-top: 18px;
+            /* 与画布保持 18px 距离 */
+            color: #d4edf8;
+            /* 文字颜色：淡蓝白色 */
+            font-weight: bold;
+            /* 文字加粗 */
+            font-size: 22px;
+            /* 字号 22px */
+            padding: 0 6px;
+            /* 左右各留 6px 内边距 */
+        }
+
+        /* ----- 分数显示框（胶囊状） ----- */
+        .score-box {
+            background: #0a2a3a;
+            /* 深色背景，让白色数字更醒目 */
+            padding: 6px 24px;
+            /* 内边距：上下6px，左右24px，形成长条状 */
+            border-radius: 40px;
+            /* 大圆角变成胶囊形状 */
+            border: 1px solid #7fc1db;
+            /* 浅蓝色描边，增加精致感 */
+        }
+
+        /* ----- “重来”按钮样式 ----- */
+        .btn-restart {
+            background: #f5c542;
+            /* 金黄色背景 */
+            border: none;
+            /* 去掉默认边框 */
+            font-size: 20px;
+            /* 文字大小 20px */
+            font-weight: bold;
+            /* 加粗 */
+            padding: 8px 28px;
+            /* 内边距：上下8px，左右28px */
+            border-radius: 40px;
+            /* 大圆角 */
+            color: #1b3f4d;
+            /* 文字颜色：深蓝色 */
+            box-shadow: 0 5px 0 #a57d2a;
+            /* 底部厚阴影，模拟 3D 凸起效果 */
+            cursor: pointer;
+            /* 鼠标悬停时变为手指形状 */
+        }
+
+        /* 按钮被点击（按下）时的样式 */
+        .btn-restart:active {
+            transform: translateY(5px);
+            /* 整体向下移动 5px，模拟按下去的物理感 */
+            box-shadow: 0 1px 0 #a57d2a;
+            /* 阴影变薄，配合下移 */
+        }
+
+        /* ----- 操作提示文字（← → 移动） ----- */
+        .hint {
+            color: #b0dcec;
+            /* 淡蓝色，略柔和 */
+            font-size: 16px;
+            /* 字号稍小，作为辅助信息 */
+        }
+
+        /* ----- 手机屏幕适配（响应式） ----- */
+        @media (max-width: 680px) {
+            /* 当屏幕宽度小于 680px（手机）时执行以下样式 */
+            canvas {
+                width: 90vw;
+                /* 画布宽度占屏幕宽度的 90% */
+                height: calc(90vw * 0.66);
+                /* 高度按比例计算（原比例 400/600≈0.66） */
+            }
+            .game-wrapper {
+                padding: 15px;
+                /* 面板内边距缩小，节省屏幕空间 */
+            }
+            .info-panel {
+                font-size: 18px;
+                /* 文字缩小 */
+                flex-wrap: wrap;
+                /* 允许子元素换行 */
+                gap: 10px;
+                /* 子元素之间的间距 */
+                justify-content: center;
+                /* 居中排列 */
+            }
+        }
+    </style>
+    <!-- CSS 样式结束 -->
+
+</head>
+
+<body>
+    <!-- 页面主体开始 -->
+
+    <!-- 游戏主面板 -->
+    <div class="game-wrapper">
+
+        <!-- 画布，id 让 JavaScript 能轻松找到它 -->
+        <!-- width/height 是逻辑尺寸，必须与 CSS 的 width/height 完全一致（600x400），否则会拉伸模糊 -->
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+
+        <!-- 底部控制区 -->
+        <div class="info-panel">
+            <!-- 左边分数显示，💎 是图标，<span> 里的数字由 JavaScript 更新 -->
+            <span class="score-box">💎 <span id="scoreDisplay">0</span></span>
+            <!-- 中间操作提示 -->
+            <span class="hint">⬅️ ➡️ 移动</span>
+            <!-- 右边“重来”按钮，点击触发 JavaScript 的 resetGame 函数 -->
+            <button class="btn-restart" id="restartBtn">🔄 重来</button>
+        </div>
+    </div>
+
+    <!-- ======================== JavaScript 开始 ======================== -->
+    <script>
+        // ----- 第1步：获取画布和绘图上下文 -----
+        // 通过 id 找到画布元素，存到 canvas 变量中
+        const canvas = document.getElementById('gameCanvas');
+        // 获取 2D 绘图上下文（相当于拿到画笔），所有绘图命令都通过 ctx 执行
+        const ctx = canvas.getContext('2d');
+        // 找到显示分数的 <span> 元素，后续更新分数用
+        const scoreSpan = document.getElementById('scoreDisplay');
+
+        // ----- 第2步：固定尺寸参数（游戏世界的宽度/高度/碰撞半径） -----
+        const W = 600; // 逻辑宽度（与画布属性一致）
+        const H = 400; // 逻辑高度
+        const WHALE_RADIUS = 28; // 鲸鱼的碰撞半径（比视觉略小，手感更宽容）
+        const ITEM_RADIUS = 18; // 珍珠/海胆的碰撞半径
+
+        // ----- 第3步：游戏动态数据（会随着运行而变化） -----
+        let whale = { x: W / 2, y: H - 50 };
+        // 鲸鱼位置：x 水平居中，y 在底部向上 50px 处
+
+        let items = [];
+        // 空数组，用来存放当前屏幕上所有的掉落物品（每个物品是一个对象）
+
+        let score = 0;
+        // 当前得分，初始为 0
+
+        let gameOver = false;
+        // 游戏是否结束？false 表示进行中，true 表示已结束
+
+        // ----- 第4步：速度控制（难度调节） -----
+        // ***** 重点修改：基础速度从 1.8 降至 1.2，让游戏更轻松 *****
+        let baseSpeed = 1.2;
+        // 基础下落速度（每帧移动 1.2 像素），这是游戏开始时的速度
+
+        let currentSpeed = baseSpeed;
+        // 当前实际速度，会随着分数增加而逐渐提升
+
+        const MAX_SPEED = 6.0;
+        // 最高速度上限，防止后期快得无法反应
+
+        // ----- 第5步：物品生成控制 -----
+        let frameCounter = 0;
+        // 帧计数器，每执行一次 update 函数就加 1
+
+        const SPAWN_RATE = 32;
+        // 每累计 32 帧生成一个新物品（数值越大，生成间隔越长，掉落越稀疏）
+
+        // ----- 第6步：键盘控制 -----
+        let leftPressed = false;
+        // 左箭头是否被按住（true=按住中，false=松开）
+
+        let rightPressed = false;
+        // 右箭头是否被按住
+
+        const MOVE_SPEED = 5;
+        // 鲸鱼左右移动速度（每帧移动 5 像素）
+
+        // ----- 第7步：辅助函数 —— 更新屏幕上的分数显示 -----
+        function updateScoreDisplay() {
+            // 将变量 score 的值填入 <span> 标签中
+            scoreSpan.textContent = score;
+        }
+
+        // ----- 第8步：重置游戏（重新开局） -----
+        function resetGame() {
+            // 将鲸鱼移回中央
+            whale.x = W / 2;
+            // 清空所有物品
+            items = [];
+            // 分数归零
+            score = 0;
+            // 取消结束状态
+            gameOver = false;
+            // 速度恢复初始值
+            currentSpeed = baseSpeed;
+            // 帧计数器归零
+            frameCounter = 0;
+            // 松开所有按键（避免重置后鲸鱼还朝一边跑）
+            leftPressed = false;
+            rightPressed = false;
+            // 刷新分数显示为 0
+            updateScoreDisplay();
+
+            // 开局赠送两颗珍珠，让玩家一开始有事可做，不会空等
+            for (let i = 0; i < 2; i++) {
+                spawnItem(); // 调用生成函数，在 items 数组末尾添加一个新物品
+                const lastIndex = items.length - 1; // 获取刚添加物品的索引
+                items[lastIndex].y = 50 + i * 100; // 手动设置它的垂直位置，让两颗珍珠错开高度
+            }
+        }
+
+        // ----- 第9步：生成一个物品（珍珠或海胆） -----
+        function spawnItem() {
+            // 随机生成水平坐标 x，范围 30~570，避免贴边
+            const x = 30 + Math.random() * (W - 60);
+            // 80% 概率生成珍珠，20% 概率生成海胆
+            const isPearl = Math.random() < 0.8;
+            // 将新物品对象添加到 items 数组末尾
+            items.push({
+                x: x, // 水平位置
+                y: -ITEM_RADIUS, // 垂直位置在顶部之外（-18px），这样它会从上方掉入
+                type: isPearl ? 'pearl' : 'urchin', // 类型标记
+                radius: ITEM_RADIUS // 碰撞半径
+            });
+        }
+
+        // ----- 第10步：碰撞检测（判断鲸鱼是否碰到物品） -----
+        function checkCollision(wx, wy, item) {
+            // 计算鲸鱼圆心和物品圆心的距离（勾股定理）
+            const dx = wx - item.x;
+            const dy = wy - item.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            // 如果距离小于两者半径之和，说明发生了碰撞，返回 true
+            return dist < WHALE_RADIUS + item.radius;
+        }
+
+        // ----- 第11步：核心更新函数（每帧执行一次） -----
+        function update() {
+            // 如果游戏已结束，直接返回，不进行任何更新（画面冻结）
+            if (gameOver) return;
+
+            // 11-A 鲸鱼移动（响应键盘）
+            if (leftPressed && whale.x - WHALE_RADIUS > 0) {
+                // 如果左键按住且未超出左边界，向左移动
+                whale.x -= MOVE_SPEED;
+            }
+            if (rightPressed && whale.x + WHALE_RADIUS < W) {
+                // 如果右键按住且未超出右边界，向右移动
+                whale.x += MOVE_SPEED;
+            }
+
+            // 11-B 生成新物品（按帧计数）
+            frameCounter++;
+            if (frameCounter >= SPAWN_RATE) {
+                spawnItem(); // 生成一个
+                frameCounter = 0; // 重置计数器
+            }
+
+            // 11-C 遍历所有物品（从后往前，因为可能会删除元素）
+            for (let i = items.length - 1; i >= 0; i--) {
+                const item = items[i];
+                // 安全保护：如果 item 不存在，跳过本次循环
+                if (!item) continue;
+
+                // 物品下落（y 坐标增加）
+                item.y += currentSpeed;
+
+                // 11-D 碰撞检测：鲸鱼 vs 当前物品
+                if (checkCollision(whale.x, whale.y, item)) {
+                    if (item.type === 'pearl') {
+                        // 吃到珍珠：加 10 分
+                        score += 10;
+                        updateScoreDisplay();
+                        // 每得 20 分，且速度未达上限，就增加 0.25（温和加速）
+                        if (score % 20 === 0 && currentSpeed < MAX_SPEED) {
+                            currentSpeed = Math.min(MAX_SPEED, currentSpeed + 0.25);
+                        }
+                    } else {
+                        // 吃到海胆：扣 5 分（容错，不会结束游戏）
+                        score -= 5;
+                        updateScoreDisplay();
+                    }
+                    // 碰撞后物品消失
+                    items.splice(i, 1);
+                    continue; // 跳过底部检测
+                }
+
+                // 11-E 底部边界检测（唯一游戏结束条件：漏掉珍珠）
+                if (item.y - item.radius > H) {
+                    // 物品底部超出画布底部
+                    if (item.type === 'pearl') {
+                        // 漏掉珍珠 → 游戏结束
+                        gameOver = true;
+                        items = []; // 清空物品，显示结束画面
+                    } else {
+                        // 海胆掉出底部，直接移除，无事发生
+                        items.splice(i, 1);
+                    }
+                }
+            }
+        }
+
+        // ----- 第12步：绘图函数（每帧重新绘制画面） -----
+        function draw() {
+            // 清空画布，擦除上一帧的所有内容
+            ctx.clearRect(0, 0, W, H);
+
+            // 12-A 绘制背景水纹（装饰）
+            ctx.fillStyle = 'rgba(255,255,255,0.04)'; // 极淡的半透明白色
+            for (let i = 0; i < 6; i++) {
+                ctx.beginPath();
+                ctx.arc(80 + i * 100, 60 + i * 30, 60, 0, Math.PI * 2);
+                ctx.fill(); // 填充半透明圆
+            }
+
+            // 12-B 绘制所有物品（珍珠/海胆）
+            items.forEach(item => {
+                if (item.type === 'pearl') {
+                    // 画珍珠（白色带光泽）
+                    ctx.beginPath();
+                    ctx.arc(item.x, item.y, ITEM_RADIUS, 0, Math.PI * 2);
+                    ctx.fillStyle = '#ffffff'; // 纯白
+                    ctx.shadowColor = '#88ddff'; // 淡蓝外发光
+                    ctx.shadowBlur = 15;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    // 高光（左上角小亮点）
+                    ctx.beginPath();
+                    ctx.arc(item.x - 5, item.y - 6, 5, 0, Math.PI * 2);
+                    ctx.fillStyle = 'rgba(255,255,255,0.8)';
+                    ctx.fill();
+                    // 浅蓝色描边
+                    ctx.strokeStyle = '#aaccdd';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.arc(item.x, item.y, ITEM_RADIUS, 0, Math.PI * 2);
+                    ctx.stroke();
+                } else {
+                    // 画海胆（棕色带刺）
+                    ctx.beginPath();
+                    ctx.arc(item.x, item.y, ITEM_RADIUS, 0, Math.PI * 2);
+                    ctx.fillStyle = '#8b5a2b'; // 深棕色
+                    ctx.shadowColor = '#ff884d'; // 橙色外发光
+                    ctx.shadowBlur = 12;
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    // 画刺（8 根短线条）
+                    ctx.strokeStyle = '#5a3a1a';
+                    ctx.lineWidth = 2;
+                    for (let a = 0; a < Math.PI * 2; a += Math.PI / 4) {
+                        const x1 = item.x + Math.cos(a) * (ITEM_RADIUS - 2);
+                        const y1 = item.y + Math.sin(a) * (ITEM_RADIUS - 2);
+                        const x2 = item.x + Math.cos(a) * (ITEM_RADIUS + 6);
+                        const y2 = item.y + Math.sin(a) * (ITEM_RADIUS + 6);
+                        ctx.beginPath();
+                        ctx.moveTo(x1, y1);
+                        ctx.lineTo(x2, y2);
+                        ctx.stroke();
+                    }
+                    // 深棕色描边
+                    ctx.strokeStyle = '#4a2a10';
+                    ctx.lineWidth = 1.5;
+                    ctx.beginPath();
+                    ctx.arc(item.x, item.y, ITEM_RADIUS, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+            });
+
+            // 12-C 绘制鲸鱼（主角）
+            // 身体（扁椭圆）
+            ctx.shadowColor = '#aaddff';
+            ctx.shadowBlur = 20;
+            ctx.beginPath();
+            ctx.ellipse(whale.x, whale.y, WHALE_RADIUS + 6, WHALE_RADIUS - 4, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#2a7a9a'; // 蓝灰色
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // 肚皮（浅色区域，在身体下方）
+            ctx.beginPath();
+            ctx.ellipse(whale.x - 4, whale.y + 6, WHALE_RADIUS - 8, WHALE_RADIUS - 14, 0, 0, Math.PI * 2);
+            ctx.fillStyle = '#7ab8d4'; // 亮蓝色
+            ctx.fill();
+
+            // 眼睛（白色眼白 + 黑色瞳孔）
+            ctx.beginPath();
+            ctx.arc(whale.x + 12, whale.y - 8, 5, 0, Math.PI * 2);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(whale.x + 14, whale.y - 10, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = '#0a1a2a';
+            ctx.fill();
+
+            // 尾巴（左侧三角形）
+            ctx.fillStyle = '#2a7a9a';
+            ctx.beginPath();
+            ctx.moveTo(whale.x - WHALE_RADIUS - 8, whale.y - 6);
+            ctx.lineTo(whale.x - WHALE_RADIUS - 18, whale.y - 16);
+            ctx.lineTo(whale.x - WHALE_RADIUS - 18, whale.y + 10);
+            ctx.closePath();
+            ctx.fill();
+
+            // 喷水（三个动态小气泡）
+            ctx.fillStyle = 'rgba(200,240,255,0.6)';
+            for (let i = 0; i < 3; i++) {
+                const angle = Date.now() / 500 + i * 0.8; // 时间变化产生摆动
+                const bx = whale.x - 6 + i * 10 + Math.sin(angle) * 4;
+                const by = whale.y - WHALE_RADIUS - 8 - i * 12 + Math.cos(angle * 0.5) * 3;
+                ctx.beginPath();
+                ctx.arc(bx, by, 5 - i * 1.5, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.shadowBlur = 0;
+
+            // 12-D 游戏结束遮罩（如果 gameOver 为 true）
+            if (gameOver) {
+                // 半透明黑色覆盖层
+                ctx.fillStyle = 'rgba(0,0,0,0.65)';
+                ctx.fillRect(0, 0, W, H);
+                // 大标题（金色）
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = '#000';
+                ctx.font = 'bold 56px "Segoe UI", sans-serif';
+                ctx.fillStyle = '#ffdd77';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('💔 漏掉珍珠啦！', W / 2, H / 2 - 30);
+                // 副标题（淡蓝色）
+                ctx.font = '28px sans-serif';
+                ctx.fillStyle = '#d4edf8';
+                ctx.fillText('点击 "重来" 继续挑战', W / 2, H / 2 + 50);
+                ctx.shadowBlur = 0;
+            }
+
+            // 12-E 右下角显示当前速度（方便玩家了解难度）
+            ctx.font = '14px monospace';
+            ctx.fillStyle = 'rgba(255,255,240,0.3)';
+            ctx.textAlign = 'right';
+            ctx.textBaseline = 'bottom';
+            ctx.fillText('速度 ' + currentSpeed.toFixed(1), W - 10, H - 8);
+        }
+
+        // ----- 第13步：游戏循环（无限循环，约 60 帧/秒） -----
+        function gameLoop() {
+            update(); // 更新数据
+            draw(); // 重新绘制
+            requestAnimationFrame(gameLoop); // 请求下一帧
+        }
+
+        // ----- 第14步：键盘事件绑定 -----
+        function keydownHandler(e) {
+            const key = e.key;
+            if (key === 'ArrowLeft') {
+                leftPressed = true;
+                e.preventDefault(); // 阻止页面滚动
+            } else if (key === 'ArrowRight') {
+                rightPressed = true;
+                e.preventDefault();
+            }
+            // 彩蛋：按 R 键快速重置
+            if (key === 'r' || key === 'R') {
+                resetGame();
+                e.preventDefault();
+            }
+        }
+
+        function keyupHandler(e) {
+            const key = e.key;
+            if (key === 'ArrowLeft') {
+                leftPressed = false;
+                e.preventDefault();
+            } else if (key === 'ArrowRight') {
+                rightPressed = false;
+                e.preventDefault();
+            }
+        }
+
+        // 当浏览器窗口失去焦点（比如切换到其他软件）时，强制松开按键
+        function resetKeys() {
+            leftPressed = false;
+            rightPressed = false;
+        }
+
+        // ----- 第15步：初始化游戏（一切从这里开始） -----
+        function init() {
+            resetGame(); // 重置所有数据，并赠送两颗珍珠
+
+            // 监听键盘事件
+            window.addEventListener('keydown', keydownHandler);
+            window.addEventListener('keyup', keyupHandler);
+            // 监听窗口失去焦点事件
+            window.addEventListener('blur', resetKeys);
+
+            // 监听“重来”按钮的点击
+            document.getElementById('restartBtn').addEventListener('click', resetGame);
+
+            // 启动游戏循环
+            gameLoop();
+        }
+
+        // 执行初始化，游戏正式开始！
+        init();
+    </script>
+    <!-- JavaScript 结束 -->
+
+</body>
+</html>

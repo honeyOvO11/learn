@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>千早爱音 - 作品</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="logo">✦ Anon</div>
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="works.html" class="active">作品</a>
+            <a href="about.html">关于我</a>
+        </nav>
+    </header>
+
+    <section class="page-hero">
+        <h2>✦ 我的学习成果 ✦</h2>
+        <p>每一个作品都是成长的脚印</p>
+    </section>
+
+    <div class="works-container">
+        <div class="works-grid">
+            <!-- 作品1 - 图片缩放放大 -->
+            <div class="card">
+                <div class="card-img effect-zoom">
+                    <img src="images/1.jpg" alt="作品1">
+                </div>
+                <div class="card-body">
+                    <h3>第一个网页</h3>
+                    <p class="card-tag">HTML+CSS</p>
+                    <p class="card-desc">用语义化标签和盒模型搭建的个人介绍页，迈出了第一步。</p>
+                    <div id="detail1" class="card-detail" style="display:none;">
+                        这个项目使用了语义化标签、盒模型和基础样式，是我学习前端的第一份完整作业。
+                    </div>
+                    <button onclick="toggleDetail('detail1')" class="btn-card">📖 切换详情</button>
+                </div>
+            </div>
+
+            <!-- 作品2 - 图片旋转+缩放 -->
+            <div class="card">
+                <div class="card-img effect-rotate">
+                    <img src="images/2.jpg" alt="作品2">
+                </div>
+                <div class="card-body">
+                    <h3>Flex布局练习</h3>
+                    <p class="card-tag">CSS+动画</p>
+                    <p class="card-desc">用Flex实现多卡片排列，加上悬停旋转和过渡动画，页面很生动。</p>
+                    <div id="detail2" class="card-detail hover-highlight">
+                        重点练习了Flex布局和CSS变换（rotate），图片悬停时旋转10度，交互感很棒。
+                    </div>
+                    <p style="font-size:0.8rem; color:#999; margin-top:5px;">💡 把鼠标放在上面文字区域试试</p>
+                </div>
+            </div>
+
+            <!-- 作品3 - 图片翻转/镜面效果 -->
+            <div class="card">
+                <div class="card-img effect-flip">
+                    <img src="images/3.jpg" alt="作品3">
+                </div>
+                <div class="card-body">
+                    <h3>JS交互练习</h3>
+                    <p class="card-tag">JavaScript</p>
+                    <p class="card-desc">实现了点击弹窗和内容切换，算是和JavaScript正式打交道了！</p>
+                    <button onclick="showDetailPopup()" class="btn-card">💬 弹出详情</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>© 2026 千早爱音</footer>
+    <script src="js/main.js"></script>
+</body>
+</html>
